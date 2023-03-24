@@ -1,0 +1,14 @@
+<div class="dropdown-wrapper">
+  <button type="button" class="dropdown-toggle" [ngClass]="{'placeholder-light': !selectedOption.text}" (click)="toggleDropdown()">
+    {{ selectedOption.text || placeholder }}
+    <i class="material-icons dropdown-icon">
+      {{dropdownVisible ? 'expand_less' : 'expand_more'}}
+    </i>
+
+  </button>
+  <ul class="dropdown-menu" *ngIf="dropdownVisible">
+    <li *ngFor="let option of options" [class.selected]="option === selectedOption" (click)="selectOption(option)">
+      {{ option?.text }}
+    </li>
+  </ul>
+</div>

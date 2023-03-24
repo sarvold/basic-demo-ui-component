@@ -1,0 +1,43 @@
+
+<!-- <div [formGroup]="uiForm">
+  <label>
+    Placeholder:
+    <input type="text" formControlName="placeholder" />
+  </label>
+  <br />
+  <label>
+    Options:
+  </label>
+  <button type="button" (click)="addOption('')">Add option</button>
+  <div formArrayName="options">
+    <div *ngFor="let option of formOptions?.controls; let i = index">
+      <input [formControlName]="i" />
+      <button type="button" (click)="removeOption(i)">Remove</button>
+    </div>
+  </div>
+</div> -->
+<div class="ui-controls" [formGroup]="uiForm">
+  <div class="form-group">
+    <label class="label">
+      Placeholder:
+    </label>
+    <input class="input" type="text" formControlName="placeholder" />
+  </div>
+
+  <div class="form-group">
+    <label class="label">
+      Options:
+    </label>
+
+    <div class="options" formArrayName="options">
+      <div *ngFor="let option of formOptions?.controls; let i = index">
+        <div class="option">
+          <input class="input" [formControlName]="i" />
+          <button class="button" type="button" (click)="removeOption(i)">X</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="button button-add" type="button" (click)="addOption()">Add option</button>
+  </div>
+</div>
