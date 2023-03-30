@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { map, Subscription, takeUntil, tap } from 'rxjs';
+import { filter, map, Subscription, takeUntil, tap } from 'rxjs';
 import { UiControlsService } from 'src/app/ui-controls/ui-controls.service';
 import { DropdownOption } from '../models/dropdown';
 
@@ -36,15 +36,6 @@ export class UiDropdownComponent implements OnInit {
     this.subscriptions.add(
       this.uiControlsService.dropdownOptions$
         .pipe(
-          map((options: string[]) => {
-            return options.map(o => {
-              const optionWithIdentifier: DropdownOption = {
-                text: o,
-                id: o,
-              };
-              return optionWithIdentifier;
-            });
-          }),
           tap((options: DropdownOption[]) => {
             this.options = options;
           })
@@ -52,14 +43,31 @@ export class UiDropdownComponent implements OnInit {
         )
         .subscribe()
     );
+    this.subscriptions.add(
+      this.uiControlsService.selectedOption$
+      .pipe(
+        filter((option: DropdownOption) => {
+          return this.selectedOption.id !== option.id;
+        }),
+        tap((option: DropdownOption) => {
+          this.selectOption(option);
+        }),
+      )
+      .subscribe()
+    );
   }
+
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
 
   selectOption(option: DropdownOption) {
-    this.selectedOption = option;
-    this.optionSelected.emit(option);
+    if(this.selectedOption.id !== option.id) {
+      this.selectedOption = option;
+      this.optionSelected.emit(option);
+      this.uiControlsService.selectedOption$.next(option);
+    }
+    this.dropdownVisible = false;
   }
 
   ngOnDestroy() {

@@ -45,17 +45,19 @@
     box-shadow: 0 4px 6px rgba(32, 33, 36, 0.28);
     left: 0;
     list-style: none;
-    margin-top: 4px;
+    margin-top: 0.25rem;
     padding: 0;
     position: absolute;
     width: 100%;
     z-index: 10;
+    max-height: 14rem;
+    overflow: auto;
 
     li {
       cursor: pointer;
-      font-size: 14px;
-      padding: 10px 12px;
+      padding: 0.5rem 0.6rem;
       text-align: left;
+      line-height: 1;
 
       &:hover {
         background-color: #e3effb;

@@ -31,8 +31,8 @@
 
     <div class="options" formArrayName="options">
       <div *ngFor="let option of formOptions?.controls; let i = index">
-        <div class="option">
-          <input class="input" [formControlName]="i" />
+        <div class="option" [formGroupName]="i">
+          <input class="input" formControlName="text" />
           <button class="button" type="button" (click)="removeOption(i)">X</button>
         </div>
       </div>

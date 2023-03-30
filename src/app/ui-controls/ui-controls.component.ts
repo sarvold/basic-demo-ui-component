@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { DropdownOption } from '../models/dropdown';
 import { UiControlsService } from './ui-controls.service';
 
 @Component({
@@ -36,7 +37,7 @@ export class UiControlsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.uiForm
         .get('options')
-        ?.valueChanges.subscribe((options: string[]) => {
+        ?.valueChanges.subscribe((options: DropdownOption[]) => {
           this.uiControlsService.dropdownOptions$.next(options);
         })
     );
@@ -44,7 +45,10 @@ export class UiControlsComponent implements OnInit, OnDestroy {
 
   addOption(): void {
     const optionsArray = this.uiForm.get('options') as FormArray;
-    optionsArray.push(this.fb.control(''));
+    optionsArray.push(this.fb.group({
+      text: [''],
+      id: [Math.random()],
+    }));
   }
 
   removeOption(index: number): void {
