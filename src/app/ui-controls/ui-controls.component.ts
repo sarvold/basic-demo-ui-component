@@ -47,7 +47,7 @@ export class UiControlsComponent implements OnInit, OnDestroy {
     const optionsArray = this.uiForm.get('options') as FormArray;
     optionsArray.push(this.fb.group({
       text: [''],
-      id: [Math.random()],
+      id: [ '' + Math.random()],
     }));
   }
 

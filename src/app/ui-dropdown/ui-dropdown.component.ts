@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { filter, map, Subscription, takeUntil, tap } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Subscription, tap } from 'rxjs';
 import { UiControlsService } from 'src/app/ui-controls/ui-controls.service';
+
 import { DropdownOption } from '../models/dropdown';
 
 @Component({
@@ -15,12 +16,12 @@ export class UiDropdownComponent implements OnInit {
 
   placeholder: string = 'Select an option';
   options: DropdownOption[] = [];
-  selectedOption: DropdownOption = {id: null, text: null};
-  @Output() optionSelected = new EventEmitter<DropdownOption>();
+  selectedOption: DropdownOption = { id: null, text: null };
+  // @Output() optionSelected = new EventEmitter<DropdownOption>();
 
   dropdownVisible = false;
 
-  constructor(private uiControlsService: UiControlsService) {}
+  constructor(protected uiControlsService: UiControlsService) {}
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -45,15 +46,19 @@ export class UiDropdownComponent implements OnInit {
     );
     this.subscriptions.add(
       this.uiControlsService.selectedOption$
-      .pipe(
-        filter((option: DropdownOption) => {
-          return this.selectedOption.id !== option.id;
-        }),
-        tap((option: DropdownOption) => {
-          this.selectOption(option);
-        }),
-      )
-      .subscribe()
+        .pipe(
+          // filter((option: DropdownOption) => {
+          //   return this.selectedOption.id !== option.id;
+          // }),
+          tap((option: DropdownOption) => {
+            if (this.selectedOption.id !== option.id) {
+              this.selectedOption = option;
+              // this.optionSelected.emit(option);
+            }
+            this.dropdownVisible = false;
+          })
+        )
+        .subscribe()
     );
   }
 
@@ -61,14 +66,13 @@ export class UiDropdownComponent implements OnInit {
     this.dropdownVisible = !this.dropdownVisible;
   }
 
-  selectOption(option: DropdownOption) {
-    if(this.selectedOption.id !== option.id) {
-      this.selectedOption = option;
-      this.optionSelected.emit(option);
-      this.uiControlsService.selectedOption$.next(option);
-    }
-    this.dropdownVisible = false;
-  }
+  // selectOption(option: DropdownOption) {
+  //   if(this.selectedOption.id !== option.id) {
+  //     this.selectedOption = option;
+  //     // this.optionSelected.emit(option);
+  //   }
+  //   this.dropdownVisible = false;
+  // }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

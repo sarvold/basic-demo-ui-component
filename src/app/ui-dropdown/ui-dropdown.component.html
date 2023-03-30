@@ -7,7 +7,7 @@
 
   </button>
   <ul class="dropdown-menu" *ngIf="dropdownVisible">
-    <li *ngFor="let option of options" [class.selected]="option === selectedOption" (click)="selectOption(option)">
+    <li *ngFor="let option of options" [class.selected]="option === selectedOption" (click)="uiControlsService.selectedOption$.next(option)">
       {{ option?.text }}
     </li>
   </ul>
